@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const targetURL = "https://script.google.com/macros/s/AKfycbxFFoEaqMoAWzVnYGAv2xyMe5rEZJOZOIE1DQLpdw-PwpuzHjOyaj5wRurzHw6m8GXsWQ/exec"; // ← вставь свой ID
+  const targetURL = "https://script.google.com/macros/s/AKfycbwGV0Lo1oTahWSKOvKPdMKAQS0czQJdre1dxiq_ucUFshu1IMa82sPUre_Nqy8TCRQy9w/exec; // ← вставь свой ID
 
   try {
     const googleRes = await fetch(targetURL, {
