@@ -18,8 +18,7 @@ export default async function handler(req, res) {
 
     return res.status(200).send(result);
   } catch (err) {
-    console.error("Ошибка:", err);
+    console.error("Ошибка прокси:", err);
     return res.status(500).send("Ошибка прокси.");
   }
 }
-
