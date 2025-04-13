@@ -2,11 +2,7 @@
   "version": 2,
   "routes": [
     {
-      "src": "/api/proxy/auth",
-      "dest": "api/proxy.js"
-    },
-    {
-      "src": "/api/proxy/submit",
+      "src": "/api/proxy",
       "dest": "api/proxy.js"
     }
   ]
