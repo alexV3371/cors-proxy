@@ -2,12 +2,12 @@ export default async function handler(req, res) {
   const targetURL = "https://script.google.com/macros/s/AKfycbx5xnIZsjrPBpZndg6yIIF6PWuQsOI21bQCnMaGHZ0b4_Th2Y132AKEIs3rL25dipzS_w/exec";
 
   try {
-    const body = await req.json(); // ОБЯЗАТЕЛЬНО!
-
     const googleRes = await fetch(targetURL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
+      method: req.method,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(req.body)
     });
 
     const result = await googleRes.text();
