@@ -1,17 +1,20 @@
 export default async function handler(req, res) {
-  // Если это preflight-запрос (CORS)
+  // Устанавливаем CORS-заголовки для всех запросов
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+
+  // Обработка preflight-запроса (OPTIONS)
   if (req.method === "OPTIONS") {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    return res.status(200).end(); // ничего не делаем, просто подтверждаем
+    return res.status(200).end();
   }
 
   const targetURL = "https://script.google.com/macros/s/AKfycbx5xnIZsjrPBpZndg6yIIF6PWuQsOI21bQCnMaGHZ0b4_Th2Y132AKEIs3rL25dipzS_w/exec";
 
   try {
     const googleRes = await fetch(targetURL, {
-      method: req.method,
+      method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
@@ -19,10 +22,6 @@ export default async function handler(req, res) {
     });
 
     const result = await googleRes.text();
-
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
     return res.status(200).send(result);
   } catch (err) {
