@@ -1,20 +1,19 @@
 export default async function handler(req, res) {
-  // Определяем разрешённый сайт
-  const allowedOrigin = "https://logis3.com"; // твой домен
+  const allowedOrigins = ["https://logis3.com", "https://www.logis3.com"];
+  const origin = req.headers.origin;
 
-  // Обрабатываем preflight-запрос
-  if (req.method === "OPTIONS") {
-    res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    res.status(200).end();
-    return;
+  // Проверяем, можно ли этот origin
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
   }
 
-  // Устанавливаем CORS-заголовки для остальных запросов
-  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // OPTIONS — preflight
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
 
   const targetURL = "https://script.google.com/macros/s/AKfycbwSlusc3BXpcng8Sg_EBPoYmiATvP3mT32PiTB2ubiv3yuHp9ft_gqb6UstZd9h2wk5/exec";
 
