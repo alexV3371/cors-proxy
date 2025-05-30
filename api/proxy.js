@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   }
 
 
-  const targetURL = "https://script.google.com/macros/s/AKfycbxrmTCSRiRVpZLgtzYerWO0wFR-dACSLDEXVNkwCYzmfRO24jjLwEMD_Mn3Un3s4Uyn/exec";
+  const targetURL = "https://script.google.com/macros/s/AKfycby0bBysVIaax88YmIScRUouo8K59ruY0thdWgFq8a8v9AHu3I0e2HIghlkyzpXTB-owsQ/exec";
   
 
 
