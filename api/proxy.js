@@ -1,14 +1,20 @@
 export default async function handler(req, res) {
-  // Устанавливаем CORS-заголовки для всех запросов
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // Определяем разрешённый сайт
+  const allowedOrigin = "https://logis3.com"; // твой домен
+
+  // Обрабатываем preflight-запрос
+  if (req.method === "OPTIONS") {
+    res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.status(200).end();
+    return;
+  }
+
+  // Устанавливаем CORS-заголовки для остальных запросов
+  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
-  // Обработка preflight-запроса (OPTIONS)
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
 
   const targetURL = "https://script.google.com/macros/s/AKfycbwSlusc3BXpcng8Sg_EBPoYmiATvP3mT32PiTB2ubiv3yuHp9ft_gqb6UstZd9h2wk5/exec";
 
@@ -22,10 +28,9 @@ export default async function handler(req, res) {
     });
 
     const result = await googleRes.text();
-
-    return res.status(200).send(result);
+    res.status(200).send(result);
   } catch (err) {
     console.error("Ошибка прокси:", err);
-    return res.status(500).send("Ошибка прокси.");
+    res.status(500).send("Ошибка прокси.");
   }
 }
