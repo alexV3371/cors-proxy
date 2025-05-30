@@ -2,15 +2,14 @@ export default async function handler(req, res) {
   const allowedOrigins = ["https://logis3.com", "https://www.logis3.com"];
   const origin = req.headers.origin || "";
 
+  // ✅ Установим CORS — по умолчанию null, если не в списке
+  const allowOrigin = allowedOrigins.includes(origin) ? origin : "";
+
+  res.setHeader("Access-Control-Allow-Origin", allowOrigin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Vary", "Origin");
 
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-
-  // Вот сюда ОБЯЗАТЕЛЬНО вернуть ответ с заголовками CORS
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
