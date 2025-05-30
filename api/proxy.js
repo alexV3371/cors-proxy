@@ -2,19 +2,24 @@ export default async function handler(req, res) {
   const allowedOrigins = ["https://logis3.com", "https://www.logis3.com"];
   const origin = req.headers.origin || "";
 
-  // ✅ Установим CORS — по умолчанию null, если не в списке
-  const allowOrigin = allowedOrigins.includes(origin) ? origin : "";
+  // CORS
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  } else {
+    res.setHeader("Access-Control-Allow-Origin", "https://logis3.com"); // ← fallback
+  }
 
-  res.setHeader("Access-Control-Allow-Origin", allowOrigin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   res.setHeader("Vary", "Origin");
 
+  // Preflight
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
-  const targetURL = "https://script.google.com/macros/s/AKfycbwSlusc3BXpcng8Sg_EBPoYmiATvP3mT32PiTB2ubiv3yuHp9ft_gqb6UstZd9h2wk5/exec";
+  // Прокси на Google Script
+  const targetURL = "https://script.google.com/macros/s/AKfycb.../exec";
 
   try {
     const googleRes = await fetch(targetURL, {
@@ -25,7 +30,7 @@ export default async function handler(req, res) {
       body: JSON.stringify(req.body)
     });
 
-    const result = await googleRes.text();
+    const result = await googleRes.text(); // даже если JSON, вернем как текст
     res.status(200).send(result);
   } catch (err) {
     console.error("Ошибка прокси:", err);
